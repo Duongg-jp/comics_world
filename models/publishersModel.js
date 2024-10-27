@@ -3,19 +3,19 @@
 const connection = require("../database/db");
 
 // lấy danh sách publishers
-const getAllPublishers = () => {
-  const query = `SELECT * FROM publishers`;
-  return new Promise((res, rej) => {
-    connection.query(query, (error, result) => {
+const getPublishers = (id = null) => {
+  const query = id ? `SELECT * FROM publishers WHERE id = ?` : `SELECT * FROM publishers`;
+  return new Promise((resolve, reject) => {
+    connection.query(query, id ? [id] : [], (error, result) => {
       if (error) {
-        rej(error);
+        reject(error);
         return;
       }
-      res(result);
+      resolve(result);
     });
   });
 };
 
 module.exports = {
-  getAllPublishers,
+  getPublishers,
 };

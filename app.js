@@ -10,9 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const categoriesRoutes = require('./routes/categoriesRoutes');
 const publishersRoutes = require('./routes/publishersRoutes');
+const comicsRoutes = require('./routes/comicsRoutes');
 
 app.use('/api/categories',categoriesRoutes)
 app.use('/api/publishers',publishersRoutes)
+app.use('/api/comics',comicsRoutes)
 
 app.use((req, res) => {
   res.status(404).json({

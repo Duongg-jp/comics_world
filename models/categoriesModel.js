@@ -2,11 +2,10 @@
 
 const connection = require("../database/db");
 
-// lấy danh sách categories
-const getAllCategories = () => {
-  const query = `SELECT * FROM categories`;
+const getCategories = (id = null) => {
+  const query = id ? `SELECT * FROM categories WHERE id = ?` : `SELECT * FROM categories`;
   return new Promise((resolve, reject) => {
-    connection.query(query, (error, result) => {
+    connection.query(query, id ? [id] : [], (error, result) => {
       if (error) {
         reject(error);
         return;
@@ -16,18 +15,6 @@ const getAllCategories = () => {
   });
 };
 
-// lấy danh sách categories theo id
-const getCategoryById = (id) => {
-  const query = `SELECT * FROM categories WHERE id = ${id}`;
-  return new Promise((resolve, reject) => {
-    connection.query(query, (error, result) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(result);
-    });
-  });
-};
 
 // thêm data categories
 const addCategories = (name) => {
@@ -71,9 +58,8 @@ const deleteCategories = (id) => {
   });
 };
 module.exports = {
-  getAllCategories,
+  getCategories,
   addCategories,
-  getCategoryById,
   updateCategories,
   deleteCategories,
 };

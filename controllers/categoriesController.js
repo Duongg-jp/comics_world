@@ -3,15 +3,33 @@
 const CategoriesModel = require("../models/categoriesModel");
 
 // lấy danh sách categories
-const getAllCategories = async (req, res) => {
-  const getCategories = await CategoriesModel.getAllCategories();
-  return res.status(200).json({
-    success: true,
-    message: "Lấy danh sách categories thành công",
-    data: {
-      getCategories,
-    },
-  });
+const getCategories = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const categories = await CategoriesModel.getCategories(id);
+
+    if (id && categories.length == 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy dữu liệu với id này ",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: id
+        ? "Lấy dữ liệu id thành công "
+        : " Lấy danh sách categories thành công",
+      data: {
+        categories,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi khi lấy danh sách categories",
+      error: error.message,
+    });
+  }
 };
 
 // thêm data
@@ -19,8 +37,7 @@ const addCategories = async (req, res) => {
   const { name } = req.body;
 
   try {
-    const categoryId = await CategoriesModel.addCategories(name);
-    const categories = await CategoriesModel.getCategoryById(categoryId);
+    const categories = await CategoriesModel.getCategories(name);
 
     return res.status(200).json({
       success: true,
@@ -72,7 +89,7 @@ const deleteCategories = async (req, res) => {
 };
 
 module.exports = {
-  getAllCategories,
+  getCategories,
   addCategories,
   updateCategories,
   deleteCategories,

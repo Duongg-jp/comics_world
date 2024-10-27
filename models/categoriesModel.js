@@ -43,4 +43,37 @@ const addCategories = (name) => {
   });
 };
 
-module.exports = { getAllCategories, addCategories, getCategoryById };
+// update data categories
+const updateCategories = (id, name) => {
+  const query = `UPDATE categories SET name = ? WHERE id = ?`;
+  return new Promise((res, rej) => {
+    connection.query(query, [name, id], (error, result) => {
+      if (error) {
+        rej(error);
+        return;
+      }
+      res(result);
+    });
+  });
+};
+
+// xóa
+const deleteCategories = (id) => {
+  const query = `DELETE FROM categories WHERE id = ?`;
+  return new Promise((res, rej) => {
+    connection.query(query, [id], (error, result) => {
+      if (error) {
+        rej(error);
+        return;
+      }
+      res(result);
+    });
+  });
+};
+module.exports = {
+  getAllCategories,
+  addCategories,
+  getCategoryById,
+  updateCategories,
+  deleteCategories,
+};

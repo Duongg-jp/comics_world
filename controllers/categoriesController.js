@@ -18,9 +18,6 @@ const getAllCategories = async (req, res) => {
 const addCategories = async (req, res) => {
   const { name } = req.body;
 
-  console.log("body",res.body);
-  
-
   try {
     const categoryId = await CategoriesModel.addCategories(name);
     const categories = await CategoriesModel.getCategoryById(categoryId);
@@ -38,11 +35,45 @@ const addCategories = async (req, res) => {
       error: error.message,
     });
   }
-  
 };
 
+// update
+const updateCategories = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    await CategoriesModel.updateCategories(id, name);
+    const updateCategories = await CategoriesModel.getCategoryById(id);
+    return res.status(200).json({
+      success: true,
+      message: "Cập nhật categories thành công",
+      data: { updateCategories },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Lỗi cập nhật categories",
+      error: error.message,
+    });
+  }
+};
+
+// xóa
+const deleteCategories = async (req, res) => {
+  const { id } = req.params;
+
+  const deleteCategories = await CategoriesModel.deleteCategories(id);
+  return res.status(200).json({
+    success: true,
+    message: "Xóa thành công ",
+    data: deleteCategories,
+  });
+};
 
 module.exports = {
   getAllCategories,
   addCategories,
+  updateCategories,
+  deleteCategories,
 };

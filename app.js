@@ -5,6 +5,7 @@ const PORT = 3000;
 require('./database/db');
 
 // Middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const categoriesRoutes = require('./routes/categoriesRoutes');

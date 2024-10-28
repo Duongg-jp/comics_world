@@ -6,7 +6,7 @@ const comicsModel = require("../models/comicsModel");
 const getComics = async (req, res) => {
   const { id } = req.params;
   try {
-    const comics = await comicsModel.getComics;
+    const comics = await comicsModel.getComics(id ? id : null);
 
     if (id && comics.length == 0) {
       return res.status(404).json({
@@ -62,7 +62,40 @@ const addComics = async (req, res) => {
   }
 };
 
+// Cập nhật
+const updateComics = async (req, res) => {
+  const { id } = req.params;
+  const { name, author, price, stock, publisher_id, category_id } = req.body;
+
+  try {
+    await comicsModel.updateComics(
+      id,
+      name,
+      author,
+      price,
+      stock,
+      publisher_id,
+      category_id
+    );
+
+    const updatedComic = await comicsModel.getComics(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Cập nhật truyện tranh thành công",
+      data: { updatedComic },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Lỗi cập nhật truyện tranh",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getComics,
   addComics,
+  updateComics,
 };

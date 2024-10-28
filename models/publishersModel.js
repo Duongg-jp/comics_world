@@ -32,7 +32,28 @@ const addPublishers = (name, contact_email) => {
   });
 };
 
+// Cập nhật
+const updatePublishers = (id, name, contact_email) => {
+  const query = `
+    INSERT INTO publishers (id, name, contact_email) 
+    VALUES (?, ?, ?) 
+    ON DUPLICATE KEY UPDATE 
+      name = VALUES(name), 
+      contact_email = VALUES(contact_email)`;
+
+  return new Promise((res, rej) => {
+    connection.query(query, [id, name, contact_email], (error, result) => {
+      if (error) {
+        return rej(error);
+      }
+      res(result);
+    });
+  });
+};
+
+
 module.exports = {
   getPublishers,
   addPublishers,
+  updatePublishers,
 };

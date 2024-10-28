@@ -32,6 +32,33 @@ const getPublishers = async (req, res) => {
   }
 };
 
+// thêm data
+const addPublishers = async (req, res) => {
+  const { name, contact_email } = req.body;
+
+  try {
+     // Thêm publisher mới và lấy ID của nó
+     const publisherId = await publishersModel.addPublishers(name, contact_email);
+    
+     // Truy vấn lại để lấy thông tin chi tiết của publisher vừa thêm
+     const newPublisher = await publishersModel.getPublishers(publisherId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Thêm publishers thành công",
+      data: { newPublisher },
+    });
+  } catch (error) {
+    console.error("Error :", error);
+    return res.status(500).json({
+      success: false,
+      message: "lỗi publishers.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getPublishers,
+  addPublishers,
 };

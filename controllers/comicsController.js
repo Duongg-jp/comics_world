@@ -32,6 +32,37 @@ const getComics = async (req, res) => {
   }
 };
 
+// thêm data
+const addComics = async (req, res) => {
+  const { name, author, price, stock, publisher_id, category_id } = req.body; // Bỏ id
+
+  try {
+    const comicsId = await comicsModel.addComics(
+      name,
+      author,
+      price,
+      stock,
+      publisher_id,
+      category_id
+    );
+
+    const newComics = await comicsModel.getComics(comicsId);
+    return res.status(200).json({
+      success: true,
+      message: "Thêm comics thành công",
+      data: { newComics },
+    });
+  } catch (error) {
+    console.error("Error :", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi comics.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
-    getComics,
+  getComics,
+  addComics,
 };
